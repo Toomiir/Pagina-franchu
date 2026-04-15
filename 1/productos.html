@@ -115,8 +115,8 @@
     </div>
     <div class="items" id="items"></div>
     <div class="dfoot">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><span>Total ficticio</span><b id="total">0 puntos</b></div>
-      <button class="btn primary" style="width:100%" onclick="checkout()">Confirmar pedido falso</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><span>Total</span><b id="total">0 puntos</b></div>
+      <button class="btn primary" style="width:100%" onclick="checkout()">Confirmar pedido</button>
     </div>
   </section>
 
@@ -162,7 +162,7 @@ function initSession(){
     return;
   }
   document.getElementById('sessionChip').textContent = '@' + session.usuario;
-  document.getElementById('banner').innerHTML = 'Comprando como <b>@' + session.usuario + '</b> · todo es ficticio y local.';
+  document.getElementById('banner').innerHTML = 'Comprando como <b>@' + session.usuario + '</b> · inicio confirmado.';
 }
 
 function filteredProducts(){
