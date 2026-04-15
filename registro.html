@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DETAL MICK — Registro</title>
+<style>
+  :root{--bg:#0d0b0b;--panel:#161212;--panel2:#1d1717;--text:#ff0000;--muted:#a88989;--line:#362a2a;--accent:#ff0000;--danger:#ff7d7d}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Arial,Helvetica,sans-serif;background:repeating-linear-gradient(0deg, rgba(255, 106, 106, 0.04) 0 1px, transparent 1px 26px),var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .card{width:100%;max-width:460px;background:rgba(22, 18, 18, 0.95);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 15px 40px rgba(0,0,0,.35)}
+  .brand{color:var(--accent);letter-spacing:3px;font-weight:800;margin-bottom:8px}
+  h1{font-size:2rem;margin-bottom:6px}
+  p{color:var(--muted);line-height:1.6;margin-bottom:18px}
+  .field{margin-bottom:14px}
+  label{display:block;margin-bottom:6px;font-size:.88rem;color:#ff5a5a}
+  input{width:100%;padding:12px 14px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--text);outline:none}
+  input:focus{border-color:var(--accent)}
+  .btn{width:100%;padding:12px 14px;border:1px solid var(--line);background:var(--accent);color:#100707;border-radius:10px;font-weight:800;cursor:pointer}
+  .btn:hover{filter:brightness(1.05)}
+  .note{margin-top:12px;color:var(--muted);font-size:.86rem}
+  .msg{display:none;margin-bottom:14px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel2)}
+  .msg.show{display:block}
+  .err{color:var(--danger)}
+  .ok{color:#ff9e9e}
+  .links{margin-top:14px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">DETAL MICK</div>
+    <h1>Crear alias</h1>
+    <p>Tu usuario va a aparecer en la tienda cuando entres. Todo queda guardado en este navegador.</p>
+    <div id="msg" class="msg"></div>
+
+    <div class="field"><label>Nombre completo</label><input id="nombre" type="text" placeholder="Ej:Misco Jones"></div>
+    <div class="field"><label>Usuario</label><input id="usuario" type="text" placeholder="Ej: tomo_hax" autocomplete="off"></div>
+    <div class="field"><label>Contraseña</label><input id="password" type="password" placeholder="Mínimo 4 caracteres"></div>
+
+    <button class="btn" onclick="register()">Entrar al mercado</button>
+    <div class="note">Tengan cuidado.</div>
+    <div class="links"><a href="login.html">Ya tengo cuenta</a><a href="index.html">Volver al inicio</a></div>
+  </div>
+
+<script>
+const ACCOUNTS_KEY = 'bytebloom_accounts';
+const SESSION_KEY = 'bytebloom_session';
+
+function loadAccounts(){ return JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || '[]'); }
+function saveAccounts(list){ localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(list)); }
+function setMsg(text, ok){ const el=document.getElementById('msg'); el.textContent=text; el.className='msg show ' + (ok?'ok':'err'); }
+
+function register(){
+  const nombre = document.getElementById('nombre').value.trim();
+  const usuario = document.getElementById('usuario').value.trim().toLowerCase();
+  const password = document.getElementById('password').value;
+
+  if(nombre.length < 3 || usuario.length < 3 || password.length < 4){
+    setMsg('Completá nombre, usuario y contraseña.', false);
+    return;
+  }
+  if(!/^[a-z0-9_]+$/i.test(usuario)){
+    setMsg('El usuario solo puede tener letras, números y _', false);
+    return;
+  }
+
+  const accounts = loadAccounts();
+  if(accounts.some(a => a.usuario === usuario)){
+    setMsg('Ese usuario ya existe en esta demo.', false);
+    return;
+  }
+
+  const account = { nombre, usuario, password };
+  accounts.push(account);
+  saveAccounts(accounts);
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ nombre, usuario }));
+  setMsg('Cuenta creada. Entrando...', true);
+  setTimeout(() => location.href = 'productos.html', 700);
+}
+</script>
+</body>
+</html>
